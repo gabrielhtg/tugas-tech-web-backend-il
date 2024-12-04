@@ -17,7 +17,7 @@ const config = {
 };
 
 const queries = [
-  `DROP DATABASE notes_db`,
+  `DROP DATABASE IF EXIST notes_db`,
   `CREATE DATABASE notes_db`,
   `USE notes_db`,
   `CREATE TABLE notes
