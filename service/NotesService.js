@@ -61,9 +61,37 @@ const update = async (req, res) => {
   }
 };
 
+const remove = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [rows] = await pool.query("SELECT * FROM notes WHERE id = ?", [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Catatan tidak ditemukan" });
+    }
+
+    const deletedNote = rows[0];
+
+    await pool.query("DELETE FROM notes WHERE id = ?", [id]);
+
+    res.status(200).json({
+      message: "Catatan berhasil dihapus",
+      deletedNote: {
+        id: deletedNote.id,
+        title: deletedNote.title,
+        datetime: deletedNote.datetime,
+        note: deletedNote.note,
+      },
+    });
+  } catch (error) {
+    console.error("Terjadi kesalahan saat menghapus catatan:", error);
+    res.status(500).json({ message: "Gagal menghapus catatan", error });
+  }
+};
+
 const getById = async (req, res) => {};
 
-const remove = async (req, res) => {};
 
 module.exports = {
   getAll,
