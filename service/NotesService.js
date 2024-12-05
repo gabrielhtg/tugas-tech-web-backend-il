@@ -1,6 +1,9 @@
 const pool = require("../config/database");
 
-const getAll = async (req, res) => {};
+const getAll = async (req, res) => {
+  const [result] = await pool.query("select * from notes");
+  return res.json(result);
+};
 
 const create = async (req, res) => {
   const { title, datetime, note } = req.body;
@@ -12,7 +15,7 @@ const create = async (req, res) => {
   try {
     const [result] = await pool.query(
       "INSERT INTO notes (title, datetime, note) VALUES (?, ?, ?)",
-      [title, datetime, note]
+      [title, datetime, note],
     );
 
     const newNote = {
@@ -40,7 +43,7 @@ const update = async (req, res) => {
   try {
     const [result] = await pool.query(
       "UPDATE notes SET title = ?, datetime = ?, note = ? WHERE id = ?",
-      [title, datetime, note, id]
+      [title, datetime, note, id],
     );
 
     if (result.affectedRows === 0) {
@@ -91,7 +94,6 @@ const remove = async (req, res) => {
 };
 
 const getById = async (req, res) => {};
-
 
 module.exports = {
   getAll,
